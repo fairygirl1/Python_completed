@@ -11,7 +11,7 @@ import json
 
 characters_data= []
 
-for i in range(18,21):
+for i in range(18,91):
     r = requests.get(f"https://rickandmortyapi.com/api/character/{i}").json()
 
     name = r['name']
