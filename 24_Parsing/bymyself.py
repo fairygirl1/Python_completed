@@ -15,7 +15,7 @@ def yandex_chart(url):
     res = {i + 1 : {singer[i].text : ' '.join(track[i].text.split())} for i in range(len(track))}
 
     with open ('/home/sashas-toy/study/completed/24_Parsing/chart.json', 'w', encoding = 'utf-8') as f:
-        json.dump(res, f, ensure_ascii=False)
+        json.dump(res, f, ensure_ascii=False, indent=2)
 
 
 
