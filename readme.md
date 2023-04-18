@@ -1,9 +1,9 @@
 
 ***Установка виртуальной среды venv:***
 
-`python3 -m venv name`
+`python3 -m venv name.venv`
 *перейти в директорию venv*
-`source bin/activate`
+`source name.venv/bin/activate`
 *установить необходимые модули и библиотеки*
 
 ___
