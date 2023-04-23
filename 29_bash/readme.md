@@ -5,5 +5,5 @@
 
 <p>запустить его в терминале командой</p>
 
-<span class="hljs-keyword">./1.sh</span>
-<!-- </code></div> -->
+<div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-bash"><span class="hljs-keyword">./1.sh</span>
+</code></div>
