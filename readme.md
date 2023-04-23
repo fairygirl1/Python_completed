@@ -1,8 +1,3 @@
-<!---Пример кода-->
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Hi there, I'm Sasha!)](https://git.io/typing-svg)
-
-
-
 ***Установка виртуальной среды venv:***
 
 `python3 -m venv name.venv`
