@@ -1,9 +1,10 @@
 ## Установка виртуальной среды venv:
 
-`python3 -m venv name.venv`
-*перейти в директорию venv*
-`source name.venv/bin/activate`
-*установить необходимые модули и библиотеки*
+`python3 -m venv venv`<br>
+`. ./venv/bin/activate`<br><br>
+
+*добавить все установленные модули в requirements.txt*<br>
+`pip freeze >> requirements.txt`
 
 ___
 
