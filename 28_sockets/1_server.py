@@ -1,55 +1,37 @@
 import socket
-import threading
 
-# Define host and port
-HOST = 'localhost'
-PORT = 12345
-
-# Create socket object
+# Создаем сокет
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Bind socket to host and port
-server_socket.bind((HOST, PORT))
+# Задаем IP-адрес сервера и порт для прослушивания
+server_ip = '127.0.0.1'
+server_port = 12345
 
-# Listen for incoming connections
-server_socket.listen()
+# Привязываем сокет к заданному IP-адресу и порту
+server_socket.bind((server_ip, server_port))
 
-# List of connected clients
-clients = []
+# Ожидаем подключение клиента
+server_socket.listen(1)
+print("Ожидание подключения клиента...")
 
-# Function to broadcast messages to all connected clients
-def broadcast(message, sender):
-    for client in clients:
-        if client != sender:
-            client.send(message)
+# Принимаем подключение клиента
+client_socket, client_address = server_socket.accept()
+print("Подключение установлено:", client_address)
 
-# Function to handle client connections
-def handle_client(client_socket, client_address):
-    print(f"New connection from {client_address}")
-    clients.append(client_socket)
-    while True:
-        try:
-            # Receive message from client
-            message = client_socket.recv(1024)
-            if message:
-                print(f"Received message: {message.decode()}")
-                # Broadcast message to all clients
-                broadcast(message, client_socket)
-            else:
-                # Remove client from list of connected clients
-                clients.remove(client_socket)
-                client_socket.close()
-                break
-        except:
-            # Remove client from list of connected clients
-            clients.remove(client_socket)
-            client_socket.close()
-            break
-
-# Main loop to accept incoming connections
+# Принимаем и отправляем сообщения до получения слова "Пока"
 while True:
-    # Accept incoming connection
-    client_socket, client_address = server_socket.accept()
-    # Create new thread to handle client connection
-    client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
-    client_thread.start()
+    # Принимаем сообщение от клиента
+    received_message = client_socket.recv(1024).decode()
+    print("Получено сообщение от клиента:", received_message)
+
+    # Если получено слово "Пока", завершаем связь
+    if received_message == "Пока":
+        break
+
+    # Отправляем сообщение клиенту
+    message_to_send = input("Введите сообщение для отправки клиенту: ")
+    client_socket.send(message_to_send.encode())
+
+# Закрываем соединение
+client_socket.close()
+server_socket.close()
