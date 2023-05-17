@@ -6,30 +6,69 @@
 Напишите функцию вывода всех книг для вводимого с клавиатуры читателя.
 """
 
-import sqlite3
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-conn = sqlite3.connect('library.sql')
-c = conn.cursor()
+Base = declarative_base()
 
-reader_name = input('Введите свое имя: ')
+# Определение модели Читатель
+class Reader(Base):
+    __tablename__ = 'readers'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    books = relationship("Book", back_populates="reader")
 
-def b_f_r (reader_name):
+# Определение модели Книга
+class Book(Base):
+    __tablename__ = 'books'
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    author = Column(String)
+    reader_id = Column(Integer, ForeignKey('readers.id'))
+    reader = relationship("Reader", back_populates="books")
 
-    c.execute("SELECT id FROM reader WHERE name=?", (reader_name,))
-    reader_id = c.fetchone()[0]
+# Создание базы данных
+engine = create_engine('sqlite:///library.db')
+Base.metadata.create_all(engine)
 
-    # Get all books associated with the reader
-    c.execute("SELECT title, author FROM book WHERE id IN (SELECT book_id FROM reader_books WHERE reader_id=?)", (reader_id,))
-    books = c.fetchall()
+# Создание сессии для взаимодействия с базой данных
+Session = sessionmaker(bind=engine)
+session = Session()
 
+# Создание нового читателя и добавление его в базу данных
+new_Maxim = Reader(name="Максим")
+session.add(new_Maxim)
+new_Kirill = Reader(name="Кирилл")
+session.add(new_Kirill)
+session.commit()
 
+# Создание новой книги и добавление ее в базу данных для указанного читателя
+new_book = Book(title="Алые паруса", author="Александр Грин", reader=new_Maxim)
+session.add(new_book)
+new_book1 = Book(title="Вино из одуванчиков", author="Рэй Брэдбери", reader=new_Maxim)
+session.add(new_book1)
+new_book2 = Book(title="Оно", author="Стивен Кинг", reader=new_Kirill)
+session.add(new_book2)
+new_book3 = Book(title="Вишневый сад", author="Антон Чехов", reader=new_Kirill)
+session.add(new_book3)
+session.commit()
 
-    if not books:
-        print("No books found for this reader.")
+# Функция для вывода всех книг для заданного читателя
+def get_books_for_reader(reader_name):
+    reader = session.query(Reader).filter_by(name=reader_name).first()
+    if reader:
+        books = reader.books
+        if books:
+            for book in books:
+                print(f"Название: {book.title}, Автор: {book.author}")
+        else:
+            print("У читателя нет книг.")
     else:
-        print(f"Books for {reader_name}:")
-        for book in books:
-            print(f"- {book[0]} by {book[1]}")
+        print("Читатель не найден.")
 
-    conn.close()
+# Пример использования функции
+reader_name = input("Введите имя читателя: ")
+get_books_for_reader(reader_name)
+
 
