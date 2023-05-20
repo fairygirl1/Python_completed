@@ -8,4 +8,4 @@
 
 ___
 
-[Оформление .md файлов](https://habitica.fandom.com/ru/wiki/%D0%A8%D0%BF%D0%B0%D1%80%D0%B3%D0%B0%D0%BB%D0%BA%D0%B0_%D0%BF%D0%BE_Markdown)
+[Оформление .md файлов](https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa1pyMnNjcThfMGYtTW8xUG5TR0I5TmczeTk4QXxBQ3Jtc0ttV1BNdGttdTlZQ3N1Znh0d0pMV2hVaVlYdnE4TDFTZTlDQ0ptMGxadmx1RWlGcUhJcTB3MzFCRVJndmJtWk9QQk1KTENSVEdwWFduYkZfQlB3a1puZVYweEtSQ2tMa0JISUlFQXY1RnRuQ0o2b0RLcw&q=https%3A%2F%2Fgithub.com%2Fadam-p%2Fmarkdown-here%2Fwiki%2FMarkdown-Cheatsheet&v=FFBTGdEMrQ4)
