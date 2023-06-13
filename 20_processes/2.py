@@ -4,7 +4,6 @@
 Вторая должна записать в тот же файл расход краски исходя из соотношения 5л/кв.м.
 """
 
-
 import multiprocessing
 
 def calculate_room_area(width, length, height, result_queue):
@@ -14,7 +13,6 @@ def calculate_room_area(width, length, height, result_queue):
 def calculate_paint_consumption(area, result_queue):
     consumption = area * 5
     result_queue.put(consumption)
-
 
 if __name__ == '__main__':
     # Пример использования функции и записи в файл
@@ -42,6 +40,4 @@ if __name__ == '__main__':
         file.write(f"Площадь стен комнаты: {area} кв.м\n")
         file.write(f"Расход краски (5 л/кв.м): {consumption} л\n")
 
-
-    
     print("Данные о комнате записаны в файл.")
