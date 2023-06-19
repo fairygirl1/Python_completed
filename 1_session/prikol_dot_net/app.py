@@ -1,12 +1,10 @@
 # flask run
 
 from flask import Flask, render_template, redirect, url_for, request, send_file, send_from_directory
-import os
-from werkzeug.utils import secure_filename
+import requests
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
-UPLOAD_FOLDER = os.path.join(app.root_path, 'python')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route('/')
@@ -56,34 +54,38 @@ def aaa():
     return render_template('aaa.html', text=text, image_url=image_url, button_text=button_text)
 
 
-@app.route('/exam', methods=['GET', 'POST'])
+@app.route('/exam')
 def exam():
     text = "Александра,"
     image_url = "/static/7.jpeg"
     button_text = "Конечно!"
-
-    if request.method == 'POST':
-        # Проверяем, был ли отправлен файл
-        if 'file' not in request.files:
-            return redirect(request.url)
-
-        file = request.files['file']
-
-        # Проверяем, что файл был выбран
-        if file.filename == '':
-            return redirect(request.url)
-
-        # Сохраняем файл на сервере
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
     return render_template('exam.html', text=text, image_url=image_url, button_text=button_text)
 
-@app.route('/download')
-def download():
-    filename = 'exam.py'
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+@app.route('/redirect', methods=['GET'])
+def redirect_page():
+    redirect_url = 'https://www.programiz.com/python-programming/online-compiler/'
 
+    with open('./python/exam.py', 'r') as file:
+        file_content = file.read()
+
+    response = requests.get(redirect_url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    form = soup.find('form', {'id': 'editorForm'})
+    if form is None:
+        return "Форма не найдена"
+
+    code_textarea = form.find('textarea', {'name': 'code'})
+    if code_textarea is None:
+        return "Текстовое поле для кода не найдено"
+
+    code_textarea.string=file_content
+
+    form_data = {input_field['name']: input_field.get('value', '') for input_field in form.find_all('input')}
+
+    response = requests.post(redirect_url, data=form_data)
+
+    return response.content
 
 if __name__ == '__main__':
     app.run()
